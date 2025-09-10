@@ -1,0 +1,498 @@
+# MessageMedia API OpenAPI Specification
+# Optimized for Redocly Reunite - September 2025
+
+openapi: 3.0.3
+
+info:
+  version: "2.1.0"
+  title: MessageMedia API
+  description: |
+    # Introduction
+
+    The MessageMedia APIs provide powerful business messaging capabilities across sending, receiving, and processing SMS, MMS, and rich messaging.
+
+    All requests to the MessageMedia REST API must be authenticated using either Basic Authentication or HMAC signature authentication.
+
+    ## Base URLs
+
+    The API uses the following base URIs:
+
+    - **EU instance**: `https://eu.app.api.sinch.com`
+    - **APAC instance**: `https://api.messagemedia.com`
+
+    ## Authentication
+
+    To access the API, an API key and secret are required.
+
+    [Sign up for a developer account here to get access](https://developers.messagemedia.com/register/)
+
+    ## Features
+
+    ### De-Duplication
+    De-Duplication helps you avoid having to undertake data cleansing before commencing send outs.
+
+    ### Social Sending
+    Social Sending permits messages to be sent only during sociable hours (8am to 6pm based on your account's local time zone).
+
+    ### Familiar Sender
+    Familiar Sender ensures all communication sent to a customer are from the same phone number.
+
+    ### Character Converter
+    Character Converter helps you avoid being double-charged for SMS by converting all characters into the GSM-7 format.
+
+  termsOfService: 'https://messagemedia.com/au/legal/terms-of-service/'
+  contact:
+    name: MessageMedia Support
+    url: https://support.messagemedia.com
+    email: support@messagemedia.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  x-logo:
+    url: 'https://d39hc0n4m3tn9p.cloudfront.net/_Py8YCSnDersHN0-w9XjzNNq2UbWTqvYtqcU2fFEoMk/static/svg/mm.2159066a.svg'
+    altText: MessageMedia Logo
+
+servers:
+  - url: 'https://api.messagemedia.com'
+    description: APAC Production Server
+  - url: 'https://eu.app.api.sinch.com'
+    description: EU Production Server
+
+# Security schemes
+security:
+  - basicAuth: []
+  - hmacAuth: []
+
+# Tag groups for better organization
+x-tagGroups:
+  - name: Messaging
+    tags:
+      - Messages
+      - Delivery Reports
+      - Replies
+  - name: Configuration
+    tags:
+      - Source Address
+      - Number Authorisation
+      - Dedicated Numbers
+      - Webhooks Management
+      - Signature Key Management
+  - name: Reporting
+    tags:
+      - Messaging Reports
+      - Short Trackable Links Reports
+  - name: Advanced Features
+    tags:
+      - Mobile Landing Pages (beta)
+      - Contacts
+  - name: Authentication & Development
+    tags:
+      - Basic Authentication
+      - HMAC Authentication
+      - Development Tools
+      - Sub-accounts
+
+tags:
+  - name: Messages
+    description: |
+      Send and manage SMS, MMS, and TTS messages.
+
+      The Messages API provides endpoints for:
+      - Sending messages (SMS, MMS, Text-to-Speech)
+      - Checking message status
+      - Cancelling scheduled messages
+
+      ## Message Formats
+      - **SMS**: Standard text messages up to 5,000 characters
+      - **MMS**: Multimedia messages with images, audio, or video
+      - **TTS**: Text-to-Speech voice messages
+
+      ## Key Features
+      - Message scheduling
+      - Delivery reports
+      - Message expiry timestamps
+      - Custom metadata
+      - Callback URLs for webhooks
+    x-displayName: Messages
+
+paths:
+  /v1/messages:
+    post:
+      tags:
+        - Messages
+      summary: Send messages
+      description: |
+        Submit one or more messages (up to 100 per request) for delivery via SMS, MMS, or Text-to-Speech.
+
+        ## Basic Message Structure
+
+        The most basic message requires only content and a destination number:
+
+        ```json
+        {
+          "messages": [{
+            "content": "Hello World!",
+            "destination_number": "+61491570156"
+          }]
+        }
+        ```
+
+        ## Advanced Features
+
+        - **Delivery Reports**: Get real-time status updates
+        - **Scheduled Delivery**: Send messages at a future time
+        - **Message Expiry**: Set expiration times for messages
+        - **Custom Metadata**: Add custom data for tracking
+        - **Callback URLs**: Receive webhooks for status updates
+
+      operationId: sendMessages
+      security:
+        - basicAuth: []
+        - hmacAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - messages
+              properties:
+                messages:
+                  type: array
+                  minItems: 1
+                  maxItems: 100
+                  items:
+                    $ref: '#/components/schemas/Message'
+            examples:
+              simple_sms:
+                summary: Simple SMS Message
+                description: Basic SMS message with minimal required fields
+                value:
+                  messages:
+                    - content: "Hello World!"
+                      destination_number: "+61491570156"
+      responses:
+        '202':
+          description: Messages accepted for processing
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messages:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/MessageResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/RateLimit'
+
+  /v1/messages/{messageId}:
+    get:
+      tags:
+        - Messages
+      summary: Get message status
+      description: |
+        Retrieve the current status and details of a previously sent message using its message ID.
+
+        ## Message Status Values
+
+        - **queued**: Message has been accepted and is waiting to be processed
+        - **enroute**: Message is being processed by the gateway
+        - **submitted**: Message has been submitted to the carrier
+        - **delivered**: Message has been successfully delivered to the recipient
+        - **expired**: Message expired before delivery (check expiry timestamp)
+        - **rejected**: Message was permanently rejected (check error details)
+        - **failed**: Message failed to deliver (may be retried)
+
+      operationId: getMessageStatus
+      security:
+        - basicAuth: []
+        - hmacAuth: []
+      parameters:
+        - name: messageId
+          in: path
+          required: true
+          description: The unique message ID returned when the message was originally sent
+          schema:
+            type: string
+            format: uuid
+            example: "877c19ef-fa2e-4cec-827a-e1df9b5509f7"
+      responses:
+        '200':
+          description: Message status retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageStatus'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: |
+        Basic Authentication using API key and secret.
+        Format: `Authorization: Basic Base64(api_key:api_secret)`
+
+    hmacAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: |
+        HMAC Authentication for enhanced security.
+        Format: `Authorization: hmac username="...", algorithm="hmac-sha256", headers="...", signature="..."`
+
+  schemas:
+    Message:
+      type: object
+      required:
+        - content
+        - destination_number
+      properties:
+        content:
+          type: string
+          maxLength: 5000
+          description: |
+            The message content to be sent.
+
+            - **Maximum length**: 5,000 characters
+            - **Encoding**: Unicode (UTF-8) supported
+            - **SMS splitting**: Long messages are automatically split
+          example: "Hello World! This is a test message."
+
+        destination_number:
+          type: string
+          pattern: '^\+[1-9]\d{1,14}$'
+          description: |
+            The recipient's phone number in E.164 international format.
+
+            **Format**: Must start with `+` followed by country code and number
+          example: "+61491570156"
+
+        source_number:
+          type: string
+          description: |
+            The sender ID to display to the recipient.
+
+            **Options**:
+            - **Default**: Uses account default if not specified
+            - **Alpha Tag**: Registered alphanumeric ID (e.g., "MYCOMPANY")
+            - **Phone Number**: Your verified number in E.164 format
+            - **Dedicated Number**: Purchased dedicated number
+          example: "+61491570157"
+
+        format:
+          type: string
+          enum: [SMS, MMS, TTS]
+          default: SMS
+          description: |
+            The message format/type.
+
+            - **SMS**: Standard text message (default)
+            - **MMS**: Multimedia message with attachments
+            - **TTS**: Text-to-Speech voice message
+          example: "SMS"
+
+        scheduled:
+          type: string
+          format: date-time
+          description: |
+            Schedule the message for delivery at a specific future time.
+
+            **Format**: ISO 8601 date-time in UTC
+            **Timezone**: All times must be in UTC
+          example: "2025-03-15T10:30:00.000Z"
+
+        delivery_report:
+          type: boolean
+          default: false
+          description: Request real-time delivery status reports
+          example: true
+
+        callback_url:
+          type: string
+          format: uri
+          description: |
+            URL to receive webhook notifications for delivery reports and replies.
+
+            **Requirements**:
+            - Must be HTTPS (HTTP not supported for security)
+            - Must return HTTP 200-299 response codes
+          example: "https://myapp.com/webhooks/messagemedia"
+
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+            maxLength: 256
+          maxProperties: 10
+          description: |
+            Custom key-value pairs for message tracking and correlation.
+
+            **Limits**:
+            - Maximum 10 key-value pairs per message
+            - Keys: up to 100 characters each
+            - Values: up to 256 characters each
+          example:
+            campaign_id: "summer_2025"
+            customer_id: "12345"
+
+    MessageResponse:
+      type: object
+      properties:
+        message_id:
+          type: string
+          format: uuid
+          description: Unique identifier for the message
+          example: "877c19ef-fa2e-4cec-827a-e1df9b5509f7"
+        status:
+          type: string
+          enum: [queued]
+          description: Initial status (always "queued" for newly submitted messages)
+          example: "queued"
+        destination_number:
+          type: string
+          description: The recipient's phone number
+          example: "+61491570156"
+        content:
+          type: string
+          description: The message content
+          example: "Hello World!"
+        format:
+          type: string
+          enum: [SMS, MMS, TTS]
+          description: Message format
+          example: "SMS"
+
+    MessageStatus:
+      allOf:
+        - $ref: '#/components/schemas/MessageResponse'
+        - type: object
+          properties:
+            status:
+              type: string
+              enum: [queued, enroute, submitted, delivered, expired, rejected, failed, cancelled]
+              description: |
+                Current message status:
+                - **queued**: Waiting to be processed
+                - **enroute**: Being processed by gateway
+                - **submitted**: Sent to carrier
+                - **delivered**: Successfully delivered
+                - **expired**: Expired before delivery
+                - **rejected**: Permanently rejected
+                - **failed**: Failed to deliver
+                - **cancelled**: Cancelled by user
+              example: "delivered"
+            error_code:
+              type: string
+              nullable: true
+              description: Error code if message failed
+              example: "414"
+            error_message:
+              type: string
+              nullable: true
+              description: Human-readable error description
+              example: "Destination unreachable"
+            delivered_timestamp:
+              type: string
+              format: date-time
+              nullable: true
+              description: When the message was delivered (if applicable)
+              example: "2025-03-15T10:35:22.000Z"
+
+    ErrorResponse:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: High-level error description
+          example: "Invalid request format"
+        details:
+          type: string
+          description: Detailed error information
+          example: "The 'destination_number' field is required and must be in E.164 format"
+        error_code:
+          type: string
+          description: Machine-readable error code
+          example: "VALIDATION_ERROR"
+        timestamp:
+          type: string
+          format: date-time
+          description: When the error occurred
+          example: "2025-03-15T10:30:00.000Z"
+
+  responses:
+    BadRequest:
+      description: Bad Request - Invalid message data or request format
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            message: "Invalid request format"
+            details: "Phone number must be in E.164 format"
+            error_code: "VALIDATION_ERROR"
+
+    Unauthorized:
+      description: Unauthorized - Authentication credentials are missing or invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            message: "Authentication required"
+            details: "Please provide valid API credentials"
+            error_code: "UNAUTHORIZED"
+
+    Forbidden:
+      description: Forbidden - Valid credentials but insufficient permissions
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            message: "Access denied"
+            details: "Insufficient account balance"
+            error_code: "FORBIDDEN"
+
+    NotFound:
+      description: Message not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            message: "Message not found"
+            details: "No message found with the specified ID"
+            error_code: "NOT_FOUND"
+
+    RateLimit:
+      description: Rate Limited - Too many requests sent too quickly
+      headers:
+        Retry-After:
+          description: Number of seconds to wait before retrying
+          schema:
+            type: integer
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            message: "Rate limit exceeded"
+            details: "Please wait before making another request"
+            error_code: "RATE_LIMITED"

@@ -57,6 +57,12 @@
             ]
           },
           {
+            "group": "MessageMedia API",
+            "pages": [
+              "api-reference/messagemedia/introduction"
+            ]
+          },
+          {
             "group": "Endpoint examples",
             "pages": [
               "api-reference/endpoint/get",
