@@ -1,0 +1,24 @@
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# macOS
+.DS_Store
+
+# Node.js
+node_modules/
+
+# Python
+__pycache__/
+*.pyc
+
+# Logs
+*.log
+
+# Build output
+dist/
+build/
+out/
+
+# Environment files
+.env
