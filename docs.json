@@ -11,64 +11,20 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "Guides",
+        "tab": "API Reference",
         "groups": [
           {
-            "group": "Getting started",
+            "group": "Overview",
             "pages": [
-              "index",
-              "quickstart",
-              "development"
+              "api-reference/index"
             ]
           },
           {
-            "group": "Customization",
+            "group": "Messaging",
             "pages": [
-              "essentials/settings",
-              "essentials/navigation"
-            ]
-          },
-          {
-            "group": "Writing content",
-            "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
-            ]
-          },
-          {
-            "group": "AI tools",
-            "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "API reference",
-        "groups": [
-          {
-            "group": "API documentation",
-            "pages": [
-              "api-reference/introduction"
-            ]
-          },
-          {
-            "group": "MessageMedia API",
-            "pages": [
-              "api-reference/messagemedia/introduction"
-            ]
-          },
-          {
-            "group": "Endpoint examples",
-            "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "api-reference/messages/send-message",
+              "api-reference/messages/check-delivery-reports",
+              "api-reference/messages/check-replies"
             ]
           }
         ]

@@ -7,28 +7,19 @@
     "light": "#07C983",
     "dark": "#15803D"
   },
-  "navigation": {
-    "tabs": [
-      {
-        "tab": "Guides",
-        "groups": [
-          {
-            "group": "Getting started",
-            "pages": [
-              "index",
-              "quickstart",
-              "development"
-            ]
-          },
-          {
-            "group": "API Reference",
-            "pages": [
-              "api-reference/messagemedia/introduction"
-            ]
-          }
-        ]
-      }
-    ]
-  },
+  "tabs": [
+    {
+      "name": "Guides",
+      "url": "guides"
+    }
+  ],
+  "navigation": [
+    {
+      "group": "API Reference",
+      "pages": [
+        "api-reference/messagemedia/introduction"
+      ]
+    }
+  ],
   "openapi": "messagemedia-api.yaml"
 }
