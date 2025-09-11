@@ -9,11 +9,147 @@
   },
   "navigation": [
     {
-      "group": "API Reference",
+      "group": "Messaging Reports",
       "pages": [
-        "api-reference/messagemedia/introduction"
+        "api-reference/messaging-reports/metadata-keys",
+        "api-reference/messaging-reports/post-detail-report",
+        "api-reference/messaging-reports/post-insight-report",
+        "api-reference/messaging-reports/post-async-detail-report",
+        "api-reference/messaging-reports/post-async-summary-report",
+        "api-reference/messaging-reports/get-async-detail-report-status",
+        "api-reference/messaging-reports/get-async-detail-fields",
+        "api-reference/messaging-reports/scheduled-detail-report",
+        "api-reference/messaging-reports/update-a-scheduled-detail-report",
+        "api-reference/messaging-reports/scheduled-summary-report",
+        "api-reference/messaging-reports/update-a-scheduled-summary-report",
+        "api-reference/messaging-reports/get-active-reports",
+        "api-reference/messaging-reports/get-scheduled-report-by-id",
+        "api-reference/messaging-reports/delete-scheduled-report-by-id"
+      ]
+    },
+    {
+      "group": "Messages",
+      "pages": [
+        "api-reference/messages/get-message-status",
+        "api-reference/messages/cancel-scheduled-message",
+        "api-reference/messages/send-messages"
+      ]
+    },
+    {
+      "group": "Source Address",
+      "pages": [
+        "api-reference/source-address/request-a-sender-address",
+        "api-reference/source-address/submitting-a-verification-code",
+        "api-reference/source-address/re-verify-sender-address",
+        "api-reference/source-address/get-status-of-a-sender-address-request",
+        "api-reference/source-address/get-all-approved-sender-addresses",
+        "api-reference/source-address/get-sender-address-by-id",
+        "api-reference/source-address/delete-sender-address",
+        "api-reference/source-address/update-my-own-number-label"
+      ]
+    },
+    {
+      "group": "Delivery Reports",
+      "pages": [
+        "api-reference/delivery-reports/check-delivery-reports",
+        "api-reference/delivery-reports/confirm-delivery-reports-as-received"
+      ]
+    },
+    {
+      "group": "Replies",
+      "pages": [
+        "api-reference/replies/check-replies",
+        "api-reference/replies/confirm-replies-as-received"
+      ]
+    },
+    {
+      "group": "Number Authorisation",
+      "pages": [
+        "api-reference/number-authorisation/list-all-blocked-numbers",
+        "api-reference/number-authorisation/add-one-or-more-numbers-to-your-backlist",
+        "api-reference/number-authorisation/remove-a-number-from-the-blacklist",
+        "api-reference/number-authorisation/check-if-one-or-several-numbers-are-currently-blacklisted"
+      ]
+    },
+    {
+      "group": "Dedicated Numbers",
+      "pages": [
+        "api-reference/dedicated-numbers/get-numbers",
+        "api-reference/dedicated-numbers/get-number-by-id",
+        "api-reference/dedicated-numbers/get-assignment",
+        "api-reference/dedicated-numbers/create-assignment",
+        "api-reference/dedicated-numbers/delete-assignment",
+        "api-reference/dedicated-numbers/update-assignment",
+        "api-reference/dedicated-numbers/get-assigned-numbers"
+      ]
+    },
+    {
+      "group": "Short Trackable Links Reports",
+      "pages": [
+        "api-reference/short-trackable-links-reports/log-summary",
+        "api-reference/short-trackable-links-reports/log-detail"
+      ]
+    },
+    {
+      "group": "Webhooks Management",
+      "pages": [
+        "api-reference/webhooks-management/retrieve-webhook",
+        "api-reference/webhooks-management/create-webhook",
+        "api-reference/webhooks-management/delete-webhook",
+        "api-reference/webhooks-management/update-webhook"
+      ]
+    },
+    {
+      "group": "Signature Key Management",
+      "pages": [
+        "api-reference/signature-key-management/get-signature-key-list",
+        "api-reference/signature-key-management/create-signature-key",
+        "api-reference/signature-key-management/get-signature-key-detail",
+        "api-reference/signature-key-management/delete-signature-key",
+        "api-reference/signature-key-management/get-enabled-signature-key",
+        "api-reference/signature-key-management/disable-the-current-enabled-signature-key",
+        "api-reference/signature-key-management/enable-signature-key"
+      ]
+    },
+    {
+      "group": "Mobile Landing Pages (beta)",
+      "pages": [
+        "api-reference/mobile-landing-pages-beta/create-new-campaign",
+        "api-reference/mobile-landing-pages-beta/get-campaign",
+        "api-reference/mobile-landing-pages-beta/send-campaign-to-recipients",
+        "api-reference/mobile-landing-pages-beta/get-landing-pages",
+        "api-reference/mobile-landing-pages-beta/create-a-landing-page",
+        "api-reference/mobile-landing-pages-beta/delete-a-landing-page",
+        "api-reference/mobile-landing-pages-beta/update-a-landing-page",
+        "api-reference/mobile-landing-pages-beta/get-campaign-summary",
+        "api-reference/mobile-landing-pages-beta/get-campaign-events",
+        "api-reference/mobile-landing-pages-beta/export-campaign-events-async",
+        "api-reference/mobile-landing-pages-beta/get-templates",
+        "api-reference/mobile-landing-pages-beta/get-templates-fields-defination"
+      ]
+    },
+    {
+      "group": "Contacts",
+      "pages": [
+        "api-reference/contacts/get-contacts-page",
+        "api-reference/contacts/create-a-contact",
+        "api-reference/contacts/get-a-single-contact",
+        "api-reference/contacts/delete-a-contact",
+        "api-reference/contacts/update-a-contact",
+        "api-reference/contacts/get-contact-lists-page",
+        "api-reference/contacts/create-a-contact-list",
+        "api-reference/contacts/get-a-single-contact-list",
+        "api-reference/contacts/delete-a-contact-list",
+        "api-reference/contacts/update-a-contact-list",
+        "api-reference/contacts/add-or-remove-multiple-contacts-tofrom-a-list",
+        "api-reference/contacts/add-contact-to-a-list",
+        "api-reference/contacts/remove-contact-from-the-contact-list",
+        "api-reference/contacts/get-custom-fields-page",
+        "api-reference/contacts/create-a-custom-field",
+        "api-reference/contacts/get-a-single-custom-field",
+        "api-reference/contacts/delete-a-custom-field",
+        "api-reference/contacts/update-a-custom-field"
       ]
     }
-  ],
-  "openapi": "openapi.yaml"
+  ]
 }
