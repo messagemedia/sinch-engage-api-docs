@@ -1,58 +1,17 @@
 ---
 title: API Reference
-description: Comprehensive API reference for the MessageMedia API
+description: Welcome to the MessageMedia API reference documentation. This documentation provides detailed information about the available API endpoints, request/response formats, and authentication methods.
 ---
 
-# API Reference
-
-Welcome to the MessageMedia API reference documentation. This documentation provides detailed information about the available API endpoints, request/response formats, and authentication methods.
-
-## Base URLs
+### Base URLs
 
 - **APAC Production**: `https://api.messagemedia.com`
 - **EU Production**: `https://eu.app.api.sinch.com`
 
-## Authentication
+### Authentication
 
 All API endpoints require authentication. You can authenticate your requests using either Basic Authentication or HMAC Signature Authentication.
 
-## Error Handling
-
-All error responses follow this format:
-
-```json
-{
-  "error": {
-    "code": "error_code",
-    "message": "Human-readable error message",
-    "details": "Additional error details (if available)"
-  }
-}
-```
-
-### Common Error Codes
-
-| Status Code | Error Code | Description |
-|-------------|------------|-------------|
-| 400 | `invalid_request` | The request was invalid or cannot be served |
-| 401 | `unauthorized` | Authentication failed or not provided |
-| 403 | `forbidden` | Not authorized to access the resource |
-| 404 | `not_found` | The requested resource doesn't exist |
-| 429 | `rate_limit_exceeded` | Rate limit exceeded |
-| 500 | `internal_server_error` | Internal server error |
-
-## API Endpoints
-
-### Messaging
-
-- [Send a Message](/api-reference/messages/send-message) - Send SMS, MMS, or TTS messages
-- [Check Delivery Reports](/api-reference/messages/check-delivery-reports) - Retrieve delivery reports for sent messages
-- [Check Replies](/api-reference/messages/check-replies) - Retrieve replies to your messages
-
-### Configuration
-
-- [Source Addresses](/api-reference/configuration/source-addresses) - Manage sender IDs and source addresses
-- [Webhooks](/api-reference/configuration/webhooks) - Configure webhook endpoints for real-time notifications
 
 ## SDKs and Libraries
 
@@ -81,7 +40,3 @@ For information about recent changes to the API, please refer to our [Changelog]
 1. [Sign up](https://developers.messagemedia.com/register/) for a free developer account
 2. Get your API key and secret from the [Developer Portal](https://developers.messagemedia.com/)
 3. Check out the [Quick Start Guide](/quickstart) to send your first message
-
-## Webhook Security
-
-When implementing webhooks, verify the `X-MessageMedia-Signature` header to ensure the request is from MessageMedia. The signature is generated using HMAC-SHA1 with your API secret as the key.

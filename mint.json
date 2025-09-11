@@ -7,12 +7,6 @@
     "light": "#07C983",
     "dark": "#15803D"
   },
-  "tabs": [
-    {
-      "name": "Guides",
-      "url": "guides"
-    }
-  ],
   "navigation": [
     {
       "group": "API Reference",
@@ -21,5 +15,5 @@
       ]
     }
   ],
-  "openapi": "messagemedia-api.yaml"
+  "openapi": "openapi.yaml"
 }
