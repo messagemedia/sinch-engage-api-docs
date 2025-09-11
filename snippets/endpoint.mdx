@@ -1,0 +1,104 @@
+import * as React from 'react';
+
+export const MethodTypes = {
+  GET: 'get',
+  POST: 'post',
+  PUT: 'put',
+  PATCH: 'patch',
+  DELETE: 'delete',
+  HEAD: 'head',
+  OPTIONS: 'options',
+  TRACE: 'trace',
+  CONNECT: 'connect'
+};
+
+export const Endpoint = ({ method, path, auth = false, beta = false, children }) => {
+  return (
+    <div className="endpoint">
+      <div className="endpoint-header">
+        <span className={`method method-${method.toLowerCase()}`}>
+          {method.toUpperCase()}
+        </span>
+        <code className="path">{path}</code>
+        {auth && <span className="auth-badge">Requires Authentication</span>}
+        {beta && <span className="beta-badge">Beta</span>}
+      </div>
+      <div className="endpoint-content">
+        {children}
+      </div>
+    </div>
+  );
+};
+
+export const Method = ({ type, path, summary, id, auth = false, beta = false }) => {
+  return (
+    <div id={id} className="method">
+      <h3>
+        <span className={`method-type method-${type.toLowerCase()}`}>
+          {type.toUpperCase()}
+        </span>
+        <span className="method-path">{path}</span>
+        {auth && <span className="auth-badge">Auth Required</span>}
+        {beta && <span className="beta-badge">Beta</span>}
+      </h3>
+      {summary && <p className="method-summary">{summary}</p>}
+    </div>
+  );
+};
+
+export const RequestExample = ({ title, children }) => (
+  <div className="request-example">
+    <h4>{title}</h4>
+    <pre><code>{children}</code></pre>
+  </div>
+);
+
+export const ResponseExample = ({ title, children, statusCode }) => (
+  <div className="response-example">
+    <h4>{title} {statusCode && <span className="status-code">{statusCode}</span>}</h4>
+    <pre><code>{children}</code></pre>
+  </div>
+);
+
+export const CodeBlock = ({ language, children }) => (
+  <pre className={`language-${language}`}>
+    <code className={`language-${language}`}>
+      {children}
+    </code>
+  </pre>
+);
+
+export const ParameterTable = ({ children }) => (
+  <div className="parameter-table">
+    <table>
+      <thead>
+        <tr>
+          <th>Parameter</th>
+          <th>Type</th>
+          <th>Required</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        {children}
+      </tbody>
+    </table>
+  </div>
+);
+
+export const ErrorTable = ({ children }) => (
+  <div className="error-table">
+    <h4>Error Responses</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>Status Code</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        {children}
+      </tbody>
+    </table>
+  </div>
+);

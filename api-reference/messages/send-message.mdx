@@ -1,0 +1,98 @@
+---
+title: 'Send Message'
+description: 'Send SMS, MMS, or TTS messages'
+openapi: 'POST /v1/messages'
+---
+
+import { Endpoint, Method, MethodTypes } from '/snippets/endpoint.mdx';
+
+# Send a Message
+
+Send a new outbound message (SMS, MMS, or TTS).
+
+<Endpoint
+  method={MethodTypes.POST}
+  path="/v1/messages"
+  auth={false}
+  beta={false}
+>
+  <Method
+    type={MethodTypes.POST}
+    path="/v1/messages"
+    summary="Send a new message"
+    id="sendMessage"
+    auth={false}
+  />
+</Endpoint>
+
+## Request Body
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `messages` | Array | Yes | Array of message objects to send |
+| `message_expiry_timestamp` | String | No | The date and time at which the message expires. Format: ISO 8601 |
+| `notify_url` | String | No | The URL to receive delivery notifications for these messages |
+
+### Message Object
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `content` | String | Yes | The message content. For SMS, maximum 1600 characters. |
+| `destination_number` | String | Yes | The destination mobile number in E.164 format |
+| `delivery_report` | Boolean | No | Whether to request a delivery report for this message |
+| `format` | String | No | The message format. Can be `SMS`, `VOICE`, or `MMS` |
+| `scheduled` | String | No | The scheduled time for the message. Format: ISO 8601 |
+| `source_number` | String | No | The source number (sender ID) to send the message from |
+| `source_number_type` | String | No | The type of the source number. Can be `INTERNATIONAL`, `ALPHANUMERIC`, `SHORTCODE`, or `VIRTUAL` |
+
+## Example Request
+
+```json
+{
+  "messages": [
+    {
+      "content": "Your verification code is 123456",
+      "destination_number": "+61412345678",
+      "delivery_report": true,
+      "format": "SMS",
+      "source_number": "MessageMedia",
+      "source_number_type": "ALPHANUMERIC"
+    }
+  ]
+}
+```
+
+## Example Response
+
+```json
+{
+  "messages": [
+    {
+      "message_id": "4fb9e5a3-2091-4d5c-8e5d-8e8c1b9b3b8b2",
+      "status": "accepted",
+      "destination_number": "+61412345678"
+    }
+  ]
+}
+```
+
+## Error Responses
+
+| Status Code | Description |
+|-------------|-------------|
+| 400 | Bad Request - Invalid message data or request format |
+| 401 | Unauthorized - Invalid API key or secret |
+| 403 | Forbidden - Insufficient permissions |
+| 429 | Too Many Requests - Rate limit exceeded |
+| 500 | Internal Server Error - Something went wrong on our end |
+
+## Rate Limiting
+
+- **Rate limit**: 100 requests per second per API key
+- **Burst limit**: 200 requests per second per API key
+
+## Notes
+
+- Messages are queued for delivery immediately unless a future `scheduled` time is specified
+- For MMS messages, you can include media URLs in the `content` field
+- All timestamps should be in UTC timezone (ISO 8601 format)
